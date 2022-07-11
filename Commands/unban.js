@@ -21,7 +21,7 @@ module.exports = {
                 let banRole = '995768278238634045';
                 let memberTarget = message.guild.members.cache.get(user.id);
                 let mainRole = '984505316731420821';
-                var reason = args[1];
+                var reason = args.slice(1).join(' ');
                 memberTarget.roles.add(mainRole);
                 memberTarget.roles.remove(banRole);
                 message.channel.send(`<@${memberTarget.user.id}> has been unbanned.`);
