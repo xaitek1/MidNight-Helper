@@ -21,7 +21,7 @@ module.exports = {
             }
             let memberTarget = message.guild.members.cache.get(user.id);
             let kickedRole = '995762751593009322'
-            var reason = args.slice(2).join(' ')
+            var reason = args.slice(1).join(' ')
             if (!reason){
                 reason = 'No reason provided'
             }
@@ -30,7 +30,7 @@ module.exports = {
             }
             
                 message.channel.send(`<@${user.user.id}> was kicked by <@${message.author.id}>`)
-                memberTarget.roles.remove(memberTarget.roles.cache);
+                await memberTarget.roles.remove(memberTarget.roles.cache);
                 await memberTarget.roles.add(kickedRole)
                 //#SANCTIUNI
                 const mesaj = new MessageEmbed()

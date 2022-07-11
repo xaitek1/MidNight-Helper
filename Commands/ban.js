@@ -22,7 +22,7 @@ module.exports = {
             {
                 let banRole = '995768278238634045';
                 let memberTarget = message.guild.members.cache.get(user.id);
-                var reason = args[1];
+                var reason = args.slice(1).join(' ');
                 memberTarget.roles.remove(memberTarget.roles.cache);
                 memberTarget.roles.add(banRole);
                 if (!reason)

@@ -13,18 +13,20 @@ module.exports = {
     name: 'unmute',
     description: 'unmutes a member',
     async execute(message, args, client){
-        if (message.member.roles.cache.has(FOUNDER) || message.member.roles.cache.has(CEO) || message.member.roles.cache.has(CO_FOUNDER) || message.member.roles.cache.has(DEVELOPER) || message.member.roles.cache.has(MANAGER) || message.member.roles.cache.has(MODERATOR) || message.member.roles.cache.has(HELPER))
-        {
+        if (message.member.roles.cache.has(FOUNDER) || message.member.roles.cache.has(CEO) || message.member.roles.cache.has(CO_FOUNDER) || message.member.roles.cache.has(DEVELOPER) || message.member.roles.cache.has(MANAGER) || message.member.roles.cache.has(MODERATOR) || message.member.roles.cache.has(HELPER)){
             const user = message.mentions.members.first() || message.guild.members.cache.get(args[0]); //FOLOSIT DOAR LA MEMBERTARGET
             const mutedMember = message.mentions.users.first(); //FOLOSIT DOAR LA NICKNAME
             if (user)
             {
                 let muteRole = '984869290194903060';
                 let memberTarget = message.guild.members.cache.get(user.id);
-
+                var reason = args.slice(1).join(' ');
                 memberTarget.roles.remove(muteRole);
                 message.channel.send(`<@${memberTarget.user.id}> has been unmuted`);
-
+                if (!reason)
+                {
+                    reason = 'No reason provided'
+                }
                 //#SANCTIUNI
                 const mesaj = new MessageEmbed()
                     .setTitle('UNMUTE')
@@ -53,6 +55,11 @@ module.exports = {
                     .addField(
                         'Nickname',
                         message.author.nickname || message.author.tag.substring(0, message.author.tag.length - 5),
+                        true
+                    )
+                    .addField(
+                        'Reason',
+                        `${reason}`,
                         true
                     )
                     let channel = '995766750266278019'
