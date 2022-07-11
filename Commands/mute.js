@@ -109,6 +109,11 @@ module.exports = {
                         `${reason}`,
                         true
                     )
+                    .addField(
+                        'Time',
+                        `${time}`,
+                        true
+                    )
                     client.channels.cache.get('995766750266278019').send({ embeds: [mesaj] });
                     return;
             }
