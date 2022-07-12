@@ -51,7 +51,7 @@ module.exports = {
             'VERIFY-KICK',
             `Generates a new verify kick message`
         )
-        .setFooter(`${process.env.VERSION} • ${new Date(message.createdTimestamp).toLocaleDateString()}`)
+        .setFooter(`${process.env.VERSION} • ${new Date(message.createdTimestamp).toLocaleDateString()} • © Sergetec`)
         message.channel.send({ embeds: [mesaj] });
     }
 };
