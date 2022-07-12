@@ -18,6 +18,9 @@ module.exports = {
                 if (args[0] > 100){
                     args[0] = 100;
                 }
+                if (isNaN(args[0])){
+                    return message.channel.send('Nu ai scris un numar valid');
+                }
                 var amount = parseInt(args[0]);
                 message.channel.bulkDelete(amount+1);
                 message.channel.send('✅')
@@ -26,6 +29,9 @@ module.exports = {
                 })
                 return;
         }
-        message.channel.send('Nu ai permisiune!');
+        message.reply("Missing permission: **PURGE MESSAGES**")
+        .then(message => {
+            setTimeout(() => message.delete(), 5000);
+        })
     }
 }
