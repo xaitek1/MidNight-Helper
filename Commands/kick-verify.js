@@ -21,6 +21,9 @@ module.exports = {
             message.channel.send('mesaj de kick generat');
             return;
         }
-        message.channel.send('Nu ai permisiune!');
+        message.reply("Missing permission: **KICK VERIFY**")
+        .then(message => {
+            setTimeout(() => message.delete(), 5000);
+        })
     }
 }

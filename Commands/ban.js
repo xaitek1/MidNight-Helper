@@ -1,6 +1,5 @@
 const { MessageEmbed } = require('discord.js')
 
-
 //ROLES
 let FOUNDER = '984505316630732911'
 let CEO = '993535251445973012'
@@ -79,6 +78,9 @@ module.exports = {
             }
             return;
         }
-        message.channel.send('Nu ai permisiune!');
+        message.reply("Missing permission: **BAN MEMBERS**")
+        .then(message => {
+            setTimeout(() => message.delete(), 5000);
+        })
     }
 }

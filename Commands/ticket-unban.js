@@ -22,6 +22,9 @@ module.exports = {
             message.channel.send('Unban ticket generat');
             return;
         }
-        message.channel.send('Nu ai permisiune!');
+        message.reply("Missing permission: **TICKET UNBAN**")
+        .then(message => {
+            setTimeout(() => message.delete(), 5000);
+        })
     }
 }
