@@ -39,7 +39,9 @@ module.exports = {
                     message.channel.send(`<@${memberTarget.user.id}> has been muted for ${reason}, ${ms(ms(time))}`);
                 }
                 setTimeout(function(){
-                    memberTarget.roles.remove(muteRole.id);
+                    memberTarget.roles.remove(muteRole);
+
+                    //#SANCTIUNI
                     const mesaj = new MessageEmbed()
                     .setTitle('UNMUTE')
                     .setColor('GREEN')
