@@ -74,6 +74,9 @@ module.exports = {
             }
             return;
         }
-        message.channel.send('Nu ai permisiune!');
+        message.reply("Missing permission: **UNBAN MEMBERS**")
+        .then(message => {
+            setTimeout(() => message.delete(), 5000);
+        })
     }
 };
