@@ -21,7 +21,7 @@ module.exports = {
         )
         .addField(
             'PURGE',
-            `Example: \`purge 10\`\nDeletes 10 messages`
+            `Example:\n\`purge 10\`\nDeletes 10 messages\n\`purge 10 @Lancer\` deletes 10 messages sent by user Lancer`
         )
         .addField(
             'KICK',
