@@ -1,8 +1,8 @@
 # MidNight-Bot
 ## The official bot of MidNight Discord server.
 ---
-### Features
-# Commands
+## Features
+### Commands
 - ban/mute/kick
 - unban/unmute
 - logs - sanctiuni / notificari - unban
@@ -12,11 +12,11 @@
 - ping / help
 - sistem de kick
 
-# Other
+### Other
 - User/Staff permissions
 - Security
 
-# WIP
+### WIP
 - Database
 - Music
 - Slash Commands
