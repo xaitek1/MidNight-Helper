@@ -10,7 +10,7 @@ let HELPER = '984505316630732919'
 module.exports = {
     name: 'purge',
     description: 'deletes messages',
-    execute(message, args){
+    async execute(message, args){
             if (message.member.roles.cache.has(FOUNDER) || message.member.roles.cache.has(CEO) || message.member.roles.cache.has(CO_FOUNDER) || message.member.roles.cache.has(DEVELOPER) || message.member.roles.cache.has(MANAGER) || message.member.roles.cache.has(MODERATOR)){
                 if (!args[0]){
                         return message.channel.send('Nu ai scris cate mesaje');
@@ -22,12 +22,32 @@ module.exports = {
                     return message.channel.send('Nu ai scris un numar valid');
                 }
                 var amount = parseInt(args[0]);
-                message.channel.bulkDelete(amount+1);
-                message.channel.send('✅')
-                .then(message => {
-                    setTimeout(() => message.delete(), 5000);
-                })
-                return;
+                const Messages = await message.channel.messages.fetch();
+                const target = message.mentions.members.first() || message.guild.members.cache.get(args[1]);
+                if (target){
+                    let i = 0;
+                    const filtered = [];
+                    (await Messages).filter((m) => {
+                        if (m.author.id === target.id && amount > i){
+                            filtered.push(m);
+                            i++;
+                        }
+                    })
+                    await message.channel.bulkDelete(filtered, true);
+                    message.channel.send('✅')
+                    .then(message => {
+                        setTimeout(() => message.delete(), 5000);
+                    })
+                    return;
+                }
+                else{
+                    await message.channel.bulkDelete(amount+1);
+                    message.channel.send('✅')
+                    .then(message => {
+                        setTimeout(() => message.delete(), 5000);
+                    })
+                    return;
+            }
         }
         message.reply("Missing permission: **PURGE MESSAGES**")
         .then(message => {
