@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+const punishmentSchema = require('../Models/punishment-schema');
 
 //ROLES
 let FOUNDER = '984505316630732911'
@@ -22,13 +23,26 @@ module.exports = {
                 let memberTarget = message.guild.members.cache.get(user.id);
                 let mainRole = '984505316731420821';
                 var reason = args.slice(1).join(' ');
-                memberTarget.roles.add(mainRole);
-                memberTarget.roles.remove(banRole);
+                await memberTarget.roles.add(mainRole);
+                await memberTarget.roles.remove(banRole);
                 message.channel.send(`<@${memberTarget.user.id}> has been unbanned.`);
                 if (!reason)
                 {
                     reason = 'No reason provided'
                 }
+
+                //DELETING FROM DATABASE
+                const query = {
+                    userID: memberTarget.user.id,
+                }
+                const results = await punishmentSchema.find(query)
+                for (const result of results){
+                    const { type } = result
+                    if (type === 'ban'){
+                        await punishmentSchema.deleteMany(query)
+                    }
+                }
+
                 //#SANCTIUNI
                 const mesaj = new MessageEmbed()
                     .setTitle('UNBAN')
