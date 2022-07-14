@@ -39,7 +39,7 @@ module.exports = {
                 var reason = args.slice(2).join(' ')
                 const split = time.match(/\d+|\D+/g)
                 let time2 = parseInt(split[0])
-                let type = split[1].toLowerCase();
+                let type = split[1]
                 if (type === 'h'){
                     time2 *= 60;
                 }
