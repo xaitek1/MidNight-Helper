@@ -26,6 +26,13 @@ module.exports = {
             if (memberTarget.roles.cache.has(STAFF) || memberTarget.roles.cache.has(fullAccess)){
                 return message.reply('**NU INCERCA SA-TI DAI KICK LA COLEGI BRO**');
             }
+            const result = await punishmentSchema.findOne({
+                userID: user.id,
+                type: 'kick',
+            })
+            if (result){
+                return message.channel.send(`<@${user.id}> is already kicked.`)
+            }
             const kickedRole = '995762751593009322'
             var reason = args.slice(1).join(' ')
             if (!reason){
@@ -34,14 +41,6 @@ module.exports = {
             message.channel.send(`<@${user.user.id}> was kicked by <@${message.author.id}>`)
             await memberTarget.roles.remove(memberTarget.roles.cache);
             await memberTarget.roles.add(kickedRole)
-
-            const result = await punishmentSchema.findOne({
-                userID: user.id,
-                type: 'kick',
-            })
-            if (result){
-                return message.channel.send(`<@${user.id}> is already kicked.`)
-            }
             memberTarget.roles.add(kickedRole);
             let schema = await punishmentSchema.create({
                 userID: user.id,
