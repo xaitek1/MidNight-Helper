@@ -28,8 +28,6 @@ module.exports = {
                 if (memberTarget.roles.cache.has(STAFF) || memberTarget.roles.cache.has(fullAccess)){
                     return message.reply('**NU INCERCA SA-TI DAI MUTE LA COLEGI BRO**');
                 }
-                const expires1 = new Date()
-                expires1.setMinutes(expires1.getMinutes() + time2)
                 const result = await punishmentSchema.findOne({
                     userID: user.id,
                     type: 'mute',
@@ -67,6 +65,9 @@ module.exports = {
                 }
 
                 await memberTarget.roles.add(muteRole);
+                
+                const expires1 = new Date()
+                expires1.setMinutes(expires1.getMinutes() + time2)
                 let schema = await punishmentSchema.create({
                     userID: user.id,
                     staffID: message.author.id,
