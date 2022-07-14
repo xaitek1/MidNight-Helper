@@ -1,4 +1,5 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const punishmentSchema = require('../Models/punishment-schema');
 
 //ROLES
 let FOUNDER = '984505316630732911'
@@ -93,8 +94,21 @@ module.exports = {
                 let member = interaction.member
                 let mainRole = '984505316731420821'
                 let kickedRole = '995762751593009322'
-                member.roles.add(mainRole);
-                member.roles.remove(kickedRole);
+
+                //DELETING FROM DATABASE
+                const query = {
+                    userID: member.user.id,
+                }
+                const results = await punishmentSchema.find(query)
+                for (const result of results){
+                    const { type } = result
+                    if (type === 'kick'){
+                        await punishmentSchema.deleteMany(query)
+                    }
+                }
+
+                await member.roles.add(mainRole);
+                await member.roles.remove(kickedRole);
                 await client.channels.cache.get(canalStaffNotif).send(`Membrul <@${user}> s-a verificat dupa kick.`);
             }
         }

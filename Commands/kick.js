@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+const punishmentSchema = require('../Models/punishment-schema');
 
 //ROLES
 let FOUNDER = '984505316630732911'
@@ -8,6 +9,8 @@ let DEVELOPER = '984505316630732915'
 let MANAGER = '984505316630732914'
 let MODERATOR = '984505316630732918'
 let HELPER = '984505316630732919'
+let STAFF = '984505316668493876'
+let fullAccess = '988913956406063114'
 
 module.exports = {
     name: 'kick',
@@ -20,7 +23,10 @@ module.exports = {
                 return message.channel.send('Can\'t find that member')
             }
             let memberTarget = message.guild.members.cache.get(user.id);
-            let kickedRole = '995762751593009322'
+            if (memberTarget.roles.cache.has(STAFF) || memberTarget.roles.cache.has(fullAccess)){
+                return message.reply('**NU INCERCA SA-TI DAI KICK LA COLEGI BRO**');
+            }
+            const kickedRole = '995762751593009322'
             var reason = args.slice(1).join(' ')
             if (!reason){
                 reason = 'No reason provided'
@@ -28,6 +34,23 @@ module.exports = {
             message.channel.send(`<@${user.user.id}> was kicked by <@${message.author.id}>`)
             await memberTarget.roles.remove(memberTarget.roles.cache);
             await memberTarget.roles.add(kickedRole)
+
+            const result = await punishmentSchema.findOne({
+                userID: user.id,
+                type: 'kick',
+            })
+            if (result){
+                return message.channel.send(`<@${user.id}> is already kicked.`)
+            }
+            memberTarget.roles.add(kickedRole);
+            let schema = await punishmentSchema.create({
+                userID: user.id,
+                staffID: message.author.id,
+                reason: reason,
+                type: 'kick',
+            })
+            schema.save();
+
             //#SANCTIUNI
             const mesaj = new MessageEmbed()
                 .setTitle('KICK')

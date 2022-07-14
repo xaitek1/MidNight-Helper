@@ -10,10 +10,10 @@ module.exports = {
         .setAuthor(guild.name, guild.iconURL({dynamic: true}))
         .setThumbnail(guild.iconURL({dynamic: true}))
         .addField(
-        'ℹ️ | GENERAL',
-        `Name: ${guild.name}
-        Created: <t:${parseInt(guild.createdTimestamp / 1000)}:R>
-        Owner: <@${guild.ownerId}>`
+            'ℹ️ | GENERAL',
+            `Name: ${guild.name}
+            Created: <t:${parseInt(guild.createdTimestamp / 1000)}:R>
+            Owner: <@${guild.ownerId}>`
         )
         .addField(
             '🧑‍💼 | USERS',

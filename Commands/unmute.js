@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+const punishmentSchema = require('../Models/punishment-schema');
 
 //ROLES
 let FOUNDER = '984505316630732911'
@@ -21,12 +22,25 @@ module.exports = {
                 let muteRole = '984869290194903060';
                 let memberTarget = message.guild.members.cache.get(user.id);
                 var reason = args.slice(1).join(' ');
-                memberTarget.roles.remove(muteRole);
+                await memberTarget.roles.remove(muteRole);
                 message.channel.send(`<@${memberTarget.user.id}> has been unmuted`);
                 if (!reason)
                 {
                     reason = 'No reason provided'
                 }
+                
+                //DELETING FRMO DATABASE
+                const query = {
+                    userID: memberTarget.user.id,
+                }
+                const results = await punishmentSchema.find(query)
+                for (const result of results){
+                    const { type } = result
+                    if (type === 'mute'){
+                        await punishmentSchema.deleteMany(query)
+                    }
+                }
+
                 //#SANCTIUNI
                 const mesaj = new MessageEmbed()
                     .setTitle('UNMUTE')
