@@ -27,6 +27,13 @@ module.exports = {
                 if (memberTarget.roles.cache.has(STAFF) || memberTarget.roles.cache.has(fullAccess)){
                     return message.reply('**NU INCERCA SA-TI BANEZI COLEGII BRO**');
                 }
+                const result = await punishmentSchema.findOne({
+                    userID: user.id,
+                    type: 'ban',
+                })
+                if (result){
+                    return message.channel.send(`<@${user.id}> is already banned.`)
+                }
                 var reason = args.slice(1).join(' ');
                 await memberTarget.roles.remove(memberTarget.roles.cache);
                 if (!reason)
@@ -37,13 +44,6 @@ module.exports = {
                 else
                 {
                     message.channel.send(`<@${memberTarget.user.id}> has been banned for ${reason}.`);
-                }
-                const result = await punishmentSchema.findOne({
-                    userID: user.id,
-                    type: 'ban',
-                })
-                if (result){
-                    return message.channel.send(`<@${user.id}> is already banned.`)
                 }
                 await memberTarget.roles.add(banRole);
                 let schema = await punishmentSchema.create({

@@ -28,6 +28,15 @@ module.exports = {
                 if (memberTarget.roles.cache.has(STAFF) || memberTarget.roles.cache.has(fullAccess)){
                     return message.reply('**NU INCERCA SA-TI DAI MUTE LA COLEGI BRO**');
                 }
+                const expires1 = new Date()
+                expires1.setMinutes(expires1.getMinutes() + time2)
+                const result = await punishmentSchema.findOne({
+                    userID: user.id,
+                    type: 'mute',
+                })
+                if (result){
+                    return message.channel.send(`<@${user.id}> is already muted.`)
+                }
                 var time = args[1];
                 var reason = args.slice(2).join(' ')
                 const split = time.match(/\d+|\D+/g)
@@ -57,15 +66,6 @@ module.exports = {
                     message.channel.send(`<@${memberTarget.user.id}> has been muted for ${reason}, ${ms(ms(time))}`);
                 }
 
-                const expires1 = new Date()
-                expires1.setMinutes(expires1.getMinutes() + time2)
-                const result = await punishmentSchema.findOne({
-                    userID: user.id,
-                    type: 'mute',
-                })
-                if (result){
-                    return message.channel.send(`<@${user.id}> is already muted.`)
-                }
                 await memberTarget.roles.add(muteRole);
                 let schema = await punishmentSchema.create({
                     userID: user.id,
