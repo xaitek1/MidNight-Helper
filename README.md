@@ -11,12 +11,12 @@
 - user info / server info
 - ping / help
 - sistem de kick
+- Database
 
 ### Other
 - User/Staff permissions
 - Security
 
 ### WIP
-- Database
 - Music
 - Slash Commands
