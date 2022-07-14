@@ -45,7 +45,7 @@ module.exports = {
                 if (result){
                     return message.channel.send(`<@${user.id}> is already banned.`)
                 }
-                memberTarget.roles.add(banRole);
+                await memberTarget.roles.add(banRole);
                 let schema = await punishmentSchema.create({
                     userID: user.id,
                     staffID: message.author.id,
