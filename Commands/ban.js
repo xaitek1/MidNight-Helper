@@ -28,7 +28,7 @@ module.exports = {
                     return message.reply('**NU INCERCA SA-TI BANEZI COLEGII BRO**');
                 }
                 var reason = args.slice(1).join(' ');
-                memberTarget.roles.remove(memberTarget.roles.cache);
+                await memberTarget.roles.remove(memberTarget.roles.cache);
                 if (!reason)
                 {
                     reason = 'No reason provided'
