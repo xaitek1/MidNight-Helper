@@ -28,7 +28,7 @@ module.exports = {
                     return message.reply('**NU INCERCA SA-TI BANEZI COLEGII BRO**');
                 }
                 var reason = args.slice(1).join(' ');
-                memberTarget.roles.remove(memberTarget.roles.cache);
+                await memberTarget.roles.remove(memberTarget.roles.cache);
                 if (!reason)
                 {
                     reason = 'No reason provided'
@@ -45,7 +45,7 @@ module.exports = {
                 if (result){
                     return message.channel.send(`<@${user.id}> is already banned.`)
                 }
-                memberTarget.roles.add(banRole);
+                await memberTarget.roles.add(banRole);
                 let schema = await punishmentSchema.create({
                     userID: user.id,
                     staffID: message.author.id,
