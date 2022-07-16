@@ -36,6 +36,9 @@ module.exports = {
                     return message.channel.send(`<@${user.id}> is already muted.`)
                 }
                 var time = args[1];
+                if (!args[1]){
+                    return;
+                }
                 var reason = args.slice(2).join(' ')
                 let split = time.match(/\d+|\D+/g)
                 let time2 = parseInt(split[0])
