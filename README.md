@@ -18,7 +18,7 @@
 - Database
 
 ### WIP
-- Music
-- Slash Commands
-- Staff Logs
 - User history
+- Staff Logs
+- Slash Commands
+- Music
