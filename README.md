@@ -20,3 +20,4 @@
 ### WIP
 - Music
 - Slash Commands
+- Staff Logs
