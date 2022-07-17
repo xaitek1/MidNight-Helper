@@ -9,7 +9,7 @@
 - ticket unban
 - purge
 - user info / server info
-- ping / help
+- status / help
 - sistem de kick
 - Database
 
