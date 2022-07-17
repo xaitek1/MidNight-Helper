@@ -12,8 +12,8 @@ module.exports = {
             'Displays this message'
         )
         .addField(
-            'PING',
-            'Displays bot latency'
+            'STATUS',
+            'Displays bot statistics'
         )
         .addField(
             'TAG',
