@@ -11,13 +11,14 @@
 - user info / server info
 - status / help
 - sistem de kick
-- Database
 
 ### Other
 - User/Staff permissions
 - Security
+- Database
 
 ### WIP
 - Music
 - Slash Commands
 - Staff Logs
+- User history
