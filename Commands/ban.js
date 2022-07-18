@@ -1,5 +1,6 @@
 const { MessageEmbed } = require('discord.js')
 const punishmentSchema = require('../Models/punishment-schema');
+const archiveSchema = require('../Models/archive-schema')
 
 //ROLES
 let FOUNDER = '984505316630732911'
@@ -46,6 +47,8 @@ module.exports = {
                     message.channel.send(`<@${memberTarget.user.id}> has been banned for ${reason}.`);
                 }
                 await memberTarget.roles.add(banRole);
+                
+                //SANCTIUNI
                 let schema = await punishmentSchema.create({
                     userID: user.id,
                     staffID: message.author.id,
@@ -53,6 +56,15 @@ module.exports = {
                     type: 'ban',
                 })
                 schema.save();
+
+                //ARHIVA
+                let arhiva = await archiveSchema.create({
+                    userID: user.id,
+                    staffID: message.author.id,
+                    reason: reason,
+                    type: 'ban',
+                })
+                arhiva.save();
 
                     //#SANCTIUNI
                     const mesaj = new MessageEmbed()
