@@ -1,5 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const punishmentSchema = require('../Models/punishment-schema');
+const archiveSchema = require('../Models/archive-schema')
 
 //ROLES
 let FOUNDER = '984505316630732911'
@@ -40,6 +41,15 @@ module.exports = {
                         await punishmentSchema.deleteMany(query)
                     }
                 }
+
+                //ARHIVA
+                let arhiva = await archiveSchema.create({
+                    userID: user.id,
+                    staffID: message.author.id,
+                    reason: reason,
+                    type: 'unmute',
+                })
+                arhiva.save();
 
                 //#SANCTIUNI
                 const mesaj = new MessageEmbed()

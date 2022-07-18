@@ -1,4 +1,5 @@
-const { mongoose } = require("mongoose");
+const mongoose = require("mongoose");
+const mongoPath = process.env.MONGO_URI;
 const punishmentSchema = require('../Models/punishment-schema');
 const { MessageEmbed } = require('discord.js');
 
@@ -9,7 +10,7 @@ module.exports = {
     async execute (client){
         console.log('MidNight Bot online!');
 
-        await mongoose.connect(process.env.MONGO_URI, {
+        await mongoose.connect(mongoPath, {
             keepAlive: true
         }).then(() => {
             console.log('Connected to the database!')

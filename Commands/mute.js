@@ -1,6 +1,7 @@
 const ms = require('ms');
 const { MessageEmbed } = require('discord.js');
 const punishmentSchema = require('../Models/punishment-schema');
+const archiveSchema = require('../Models/archive-schema')
 
 //ROLES
 let FOUNDER = '984505316630732911'
@@ -69,6 +70,7 @@ module.exports = {
 
                 await memberTarget.roles.add(muteRole);
                 
+                //SANCTIUNI
                 const expires1 = new Date()
                 expires1.setMinutes(expires1.getMinutes() + time2)
                 let schema = await punishmentSchema.create({
@@ -79,6 +81,15 @@ module.exports = {
                     type: 'mute',
                 })
                 schema.save();
+
+                //ARHIVA
+                let arhiva = await archiveSchema.create({
+                    userID: user.id,
+                    staffID: message.author.id,
+                    reason: reason,
+                    type: 'mute',
+                })
+                arhiva.save();
                 
                 //#SANCTIUNI
                 const mesaj = new MessageEmbed()
