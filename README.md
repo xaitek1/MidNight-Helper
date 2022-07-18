@@ -5,20 +5,20 @@
 ### Commands
 - ban/mute/kick
 - unban/unmute
-- logs - sanctiuni / notificari - unban
-- ticket unban
 - purge
 - user info / server info
 - status / help
-- sistem de kick
+- user history
 
 ### Other
 - User/Staff permissions
+- Ticket unban
+- Logs - sanctiuni / notificari - unban
+- Sistem de kick
 - Security
 - Database
 
 ### WIP
-- User history
-- Staff Logs
+- Staff/Bot Logs
 - Slash Commands
 - Music
