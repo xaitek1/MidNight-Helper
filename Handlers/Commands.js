@@ -6,9 +6,13 @@ module.exports = (client) => {
     const commandsArray = [];
     for (const file of commandFiles){
         const command = require(`../Commands/${file}`);
-        commandsArray.push(command);
+        if (command.name){
+            client.commands.set(command.name, command);
+            commandsArray.push(command)
+
+            client.on("ready", () => {
+                client.guilds.cache.get("984505316462981190").commands.set(commandsArray)
+            })
+        }
     }
-    client.on('ready', () => {
-        client.commands.set(commandsArray);
-    })
 }

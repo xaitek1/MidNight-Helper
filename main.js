@@ -30,7 +30,7 @@ client.on('guildMemberAdd', async (member) => {
         }
         if (result.type == 'kick'){
             member.roles.add(kickedRole);
-        }   
+        }
     }
 })
 
