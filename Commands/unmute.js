@@ -107,5 +107,6 @@ module.exports = {
                     return;
             }
         }
+        interaction.followUp({ content: '**MISSING PERMISSION: UNMUTE MEMBERS**' });
     }
 }

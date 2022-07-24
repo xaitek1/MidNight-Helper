@@ -156,6 +156,7 @@ module.exports = {
                     return;
             }
         }
+        interaction.followUp({ content: '**MISSING PERMISSION: MUTE MEMBERS**' });
     }
 }
 

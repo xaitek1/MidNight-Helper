@@ -116,5 +116,6 @@ module.exports = {
                 client.channels.cache.get(channel).send({ embeds: [mesaj] });
                 return;
         }
+        interaction.followUp({ content: '**MISSING PERMISSION: KICK**' });
     }
 }

@@ -63,5 +63,6 @@ module.exports = {
                     return;
             }
         }
+        interaction.followUp({ content: '**MISSING PERMISSION: PURGE MESSAGES**' });
     }
 }
