@@ -1,3 +1,5 @@
+const { Client, CommandInteraction } = require('discord.js')
+
 //ROLES
 let FOUNDER = '984505316630732911'
 let CEO = '993535251445973012'
@@ -10,20 +12,32 @@ let HELPER = '984505316630732919'
 module.exports = {
     name: 'purge',
     description: 'deletes messages',
-    async execute(message, args){
-            if (message.member.roles.cache.has(FOUNDER) || message.member.roles.cache.has(CEO) || message.member.roles.cache.has(CO_FOUNDER) || message.member.roles.cache.has(DEVELOPER) || message.member.roles.cache.has(MANAGER) || message.member.roles.cache.has(MODERATOR)){
-                if (!args[0]){
-                        return message.channel.send('Nu ai scris cate mesaje');
-                    }
-                if (args[0] > 100){
-                    args[0] = 100;
+    options: [
+        {
+            name: 'amount',
+            type: 'STRING',
+            description: 'The amount of messages to be deleted',
+            required: true,
+        },
+        {
+            name: 'user',
+            type: 'USER',
+            description: 'The user of which messages to be deleted',
+            required: false,
+        },
+    ],
+    async execute(client, interaction){
+            if (interaction.member.roles.cache.has(FOUNDER) || interaction.member.roles.cache.has(CEO) || interaction.member.roles.cache.has(CO_FOUNDER) || interaction.member.roles.cache.has(DEVELOPER) || interaction.member.roles.cache.has(MANAGER) || interaction.member.roles.cache.has(MODERATOR)){
+                var amount = parseInt(interaction.options.getString('amount'));
+                if (amount > 100){
+                    amount = 100;
                 }
-                if (isNaN(args[0])){
-                    return message.channel.send('Nu ai scris un numar valid');
+                if (isNaN(amount)){
+                    return interaction.followUp('Nu ai scris un numar valid');
                 }
-                var amount = parseInt(args[0]);
-                const Messages = await message.channel.messages.fetch();
-                const target = message.mentions.members.first() || message.guild.members.cache.get(args[1]);
+                const Messages = await interaction.channel.messages.fetch();
+                const target = interaction.options.getUser('user');
+                const channel = interaction.channel.id;
                 if (target){
                     let i = 0;
                     const filtered = [];
@@ -33,25 +47,21 @@ module.exports = {
                             i++;
                         }
                     })
-                    await message.channel.bulkDelete(filtered, true);
-                    message.channel.send('✅')
+                    await interaction.channel.bulkDelete(filtered, true);
+                    await client.channels.cache.get(channel).send('✅')
                     .then(message => {
                         setTimeout(() => message.delete(), 5000);
                     })
                     return;
                 }
                 else{
-                    await message.channel.bulkDelete(amount+1);
-                    message.channel.send('✅')
+                    await interaction.channel.bulkDelete(amount+1);
+                    await client.channels.cache.get(channel).send('✅')
                     .then(message => {
                         setTimeout(() => message.delete(), 5000);
                     })
                     return;
             }
         }
-        message.reply("Missing permission: **PURGE MESSAGES**")
-        .then(message => {
-            setTimeout(() => message.delete(), 5000);
-        })
     }
 }

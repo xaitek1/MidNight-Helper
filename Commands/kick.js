@@ -1,3 +1,4 @@
+const { Client, CommandInteraction } = require('discord.js')
 const { MessageEmbed } = require('discord.js');
 const punishmentSchema = require('../Models/punishment-schema');
 const archiveSchema = require('../Models/archive-schema')
@@ -16,30 +17,44 @@ let fullAccess = '988913956406063114'
 module.exports = {
     name: 'kick',
     description: 'kicks someone off the server',
-    async execute(message, args, client){
-        if (message.member.roles.cache.has(FOUNDER) || message.member.roles.cache.has(CEO) || message.member.roles.cache.has(CO_FOUNDER) || message.member.roles.cache.has(DEVELOPER) || message.member.roles.cache.has(MANAGER) || message.member.roles.cache.has(MODERATOR)){
-            const user = message.mentions.members.first() || message.guild.members.cache.get(args[0])
-            const kickedMember = message.mentions.users.first(); //FOLOSIT DOAR LA NICKNAME
+    options: [
+        {
+            name: 'user',
+            type: 'USER',
+            description: 'The user to be kicked',
+            required: true,
+        },
+        {
+            name: 'reason',
+            type: 'STRING',
+            description: 'The reason for the kick',
+            required: true,
+        },
+    ],
+    async execute(client, interaction){
+        if (interaction.member.roles.cache.has(FOUNDER) || interaction.member.roles.cache.has(CEO) || interaction.member.roles.cache.has(CO_FOUNDER) || interaction.member.roles.cache.has(DEVELOPER) || interaction.member.roles.cache.has(MANAGER) || interaction.member.roles.cache.has(MODERATOR)){
+            const user = interaction.options.getUser('user'); //FOLOSIT DOAR LA MEMBERTARGET
+            const kickedMember = interaction.options.getUser('user'); //FOLOSIT DOAR LA NICKNAME
             if (!user){
-                return message.channel.send('Can\'t find that member')
+                return interaction.followUp('Can\'t find that member')
             }
-            let memberTarget = message.guild.members.cache.get(user.id);
+            let memberTarget = interaction.guild.members.cache.get(user.id);
             if (memberTarget.roles.cache.has(STAFF) || memberTarget.roles.cache.has(fullAccess)){
-                return message.reply('**NU INCERCA SA-TI DAI KICK LA COLEGI BRO**');
+                return interaction.followUp('**NU INCERCA SA-TI DAI KICK LA COLEGI BRO**');
             }
             const result = await punishmentSchema.findOne({
                 userID: user.id,
                 type: 'kick',
             })
             if (result){
-                return message.channel.send(`<@${user.id}> is already kicked.`)
+                return interaction.followUp(`<@${user.id}> is already kicked.`)
             }
             const kickedRole = '995762751593009322'
-            var reason = args.slice(1).join(' ')
+            var reason = interaction.options.getString('reason');
             if (!reason){
                 reason = 'No reason provided'
             }
-            message.channel.send(`<@${user.user.id}> was kicked by <@${message.author.id}>`)
+            interaction.followUp(`<@${user.id}> was kicked by <@${interaction.user.id}>`)
             await memberTarget.roles.remove(memberTarget.roles.cache);
             await memberTarget.roles.add(kickedRole)
             memberTarget.roles.add(kickedRole);
@@ -47,7 +62,7 @@ module.exports = {
             //SANCTIUNI
             let schema = await punishmentSchema.create({
                 userID: user.id,
-                staffID: message.author.id,
+                staffID: interaction.user.id,
                 reason: reason,
                 type: 'kick',
             })
@@ -56,7 +71,7 @@ module.exports = {
             //ARHIVA
             let arhiva = await archiveSchema.create({
                 userID: user.id,
-                staffID: message.author.id,
+                staffID: interaction.user.id,
                 reason: reason,
                 type: 'kick',
             })
@@ -66,7 +81,7 @@ module.exports = {
             const mesaj = new MessageEmbed()
                 .setTitle('KICK')
                 .setColor('RED')
-                .setFooter(`${process.env.VERSION} • ${new Date(message.createdTimestamp).toLocaleDateString()}`)
+                .setFooter(`${process.env.VERSION} • ${new Date(interaction.createdTimestamp).toLocaleDateString()}`)
                 .addField(
                     'ID',
                     `${memberTarget.id}`,
@@ -84,12 +99,12 @@ module.exports = {
                 )
                 .addField(
                     'Kicked by',
-                    `<@${message.author.id}>`,
+                    `<@${interaction.user.id}>`,
                     true
                 )
                 .addField(
                     'Nickname',
-                    message.author.nickname || message.author.tag.substring(0, message.author.tag.length - 5),
+                    interaction.user.nickname || interaction.user.tag.substring(0, interaction.user.tag.length - 5),
                     true
                 )
                 .addField(
@@ -101,9 +116,5 @@ module.exports = {
                 client.channels.cache.get(channel).send({ embeds: [mesaj] });
                 return;
         }
-        message.reply("Missing permission: **KICK MEMBERS**")
-        .then(message => {
-            setTimeout(() => message.delete(), 5000);
-        })
     }
 }

@@ -13,15 +13,14 @@ let everyone = '984505316462981190'
 
 module.exports = {
     name: 'interactionCreate',
-    description: 'tickets',
+    description: 'tickets / slash commands',
     on: true,
-    async execute(interaction){
+    async execute(interaction, client){
         /*
 
         TICKET - UNBAN
 
         */
-        const { client } = interaction;
         if (interaction.isButton()){
             if (interaction.customId === "open-ticket"){
                 let canalStaffNotif = '995777244280668180'
@@ -111,6 +110,23 @@ module.exports = {
                 await member.roles.remove(kickedRole);
                 await client.channels.cache.get(canalStaffNotif).send(`Membrul <@${user}> s-a verificat dupa kick.`);
             }
+        }
+
+        /*
+
+        SLASH COMMANDS - HANDLER
+
+        */
+        if (interaction.isCommand())
+        {
+            await interaction.deferReply({ ephemeral: false }).catch(() => {});
+
+            const command = client.commands.get(interaction.commandName)
+            if (!command)
+            {
+                return;
+            }
+            command.execute(client, interaction);
         }
     }
 }

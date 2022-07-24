@@ -1,3 +1,4 @@
+const { Client, CommandInteraction } = require('discord.js')
 const { MessageEmbed } = require('discord.js')
 const archiveSchema = require('../Models/archive-schema')
 
@@ -15,10 +16,20 @@ let fullAccess = '988913956406063114'
 module.exports = {
     name: 'hist',
     description: 'shows the hist of a user',
-    async execute (message, args) {
-        if (message.member.roles.cache.has(FOUNDER) || message.member.roles.cache.has(CEO) || message.member.roles.cache.has(CO_FOUNDER) || message.member.roles.cache.has(DEVELOPER) || message.member.roles.cache.has(MANAGER) || message.member.roles.cache.has(MODERATOR) || message.member.roles.cache.has(HELPER) || message.member.roles.cache.has(STAFF) || message.member.roles.cache.has(fullAccess))
+    options: [
         {
-            const user = message.mentions.members.first() || message.guild.members.cache.get(args[0]); //FOLOSIT DOAR LA MEMBERTARGET
+            name: 'user',
+            type: 'USER',
+            description: 'The user to show the hist',
+            required: true,
+        },
+    ],
+    async execute (client, interaction){
+        if (interaction.member.roles.cache.has(FOUNDER) || interaction.member.roles.cache.has(CEO) || interaction.member.roles.cache.has(CO_FOUNDER) || interaction.member.roles.cache.has(DEVELOPER) || interaction.member.roles.cache.has(MANAGER) || interaction.member.roles.cache.has(MODERATOR) || interaction.member.roles.cache.has(HELPER) || interaction.member.roles.cache.has(STAFF) || interaction.member.roles.cache.has(fullAccess))
+        {
+            const user = interaction.options.getUser('user'); //FOLOSIT DOAR LA MEMBERTARGET
+            const targetedMember = interaction.options.getUser('user'); //FOLOSIT DOAR LA NICKNAME
+            let memberTarget = interaction.options.getUser('user');
             if (user)
             {
                 const results = await archiveSchema.find({
@@ -28,10 +39,10 @@ module.exports = {
                     let mesaj = new MessageEmbed()
                     .setColor('RED')
                     .addField(
-                        'HISTORY',
+                        `HISTORY for \`${memberTarget.nickname || targetedMember.tag.substring(0, targetedMember.tag.length - 5)}\``,
                         'clean',
                     )
-                    return message.channel.send({ embeds: [mesaj] });
+                    return interaction.followUp({ embeds: [mesaj] });
                 }
                 let reply = ''
                 for (const result of results) {
@@ -39,18 +50,14 @@ module.exports = {
                 }
                 let mesaj = new MessageEmbed()
                 .setColor('RED')
-                .setFooter(`${process.env.VERSION} • ${new Date(message.createdTimestamp).toLocaleDateString()}`)
+                .setFooter(`${process.env.VERSION} • ${new Date(interaction.createdTimestamp).toLocaleDateString()}`)
                 .addField(
-                    'HISTORY',
+                    `HISTORY for \`${memberTarget.nickname || targetedMember.tag.substring(0, targetedMember.tag.length - 5)}\``,
                     `${reply}`,
                 )
-                message.channel.send({ embeds: [mesaj] });
+                interaction.followUp({ embeds: [mesaj] });
             }
             return;
         }
-        message.reply("Missing permission: **HIST**")
-        .then(message => {
-            setTimeout(() => message.delete(), 5000);
-        })
     }
 }

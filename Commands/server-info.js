@@ -1,10 +1,11 @@
+const { Client, CommandInteraction } = require('discord.js')
 const { MessageEmbed } = require('discord.js')
 
 module.exports = {
     name: 'server-info',
     description: 'displays server info',
-    async execute(message){
-        const { guild } = message;
+    async execute(client, interaction){
+        const { guild } = interaction;
         const mesaj = new MessageEmbed()
         .setColor("RED")
         .setAuthor(guild.name, guild.iconURL({dynamic: true}))
@@ -17,10 +18,7 @@ module.exports = {
         )
         .addField(
             '🧑‍💼 | USERS',
-            `- Members: ${guild.members.cache.filter((m) => !m.user.bot).size}
-            - Bots: ${guild.members.cache.filter((m) => m.user.bot).size}
-            
-            Total: ${guild.memberCount}`
+            `Total: ${guild.memberCount}`
         )
         .addField(
             '📚 | CHANNELS',
@@ -42,7 +40,7 @@ module.exports = {
             '✨ | NITRO',
             `- Boosts: ${guild.premiumSubscriptionCount}`
         )
-        .setFooter(`${process.env.VERSION} • ${new Date(message.createdTimestamp).toLocaleDateString()}`)
-        message.channel.send({embeds: [mesaj]});
+        .setFooter(`${process.env.VERSION} • ${new Date(interaction.createdTimestamp).toLocaleDateString()}`)
+        interaction.followUp({embeds: [mesaj]});
     }
 }

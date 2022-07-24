@@ -1,11 +1,20 @@
+const { Client, CommandInteraction } = require('discord.js')
 const { MessageEmbed } = require('discord.js')
 
 module.exports = {
     name: 'user-info',
-    description: 'displays user info',
-    async execute(message) {
-        const {guild} = message
-        const user = message.mentions.users.first() || message.author
+    description: 'displays informations about a user',
+    options: [
+        {
+            name: 'user',
+            type: 'USER',
+            description: 'The user to be banned',
+            required: false,
+        },
+    ],
+    async execute(client, interaction) {
+        const {guild} = interaction
+        const user = interaction.options.getUser('user') || interaction.user
         const member = guild.members.cache.get(user.id)
 
         const mesaj = new MessageEmbed()
@@ -18,7 +27,7 @@ module.exports = {
         .addField('Roles', `${member.roles.cache.map(r => r).join(' ').replace("@everyone", " ") || "None"}`)
         .addField('Joined', new Date(member.joinedTimestamp).toLocaleDateString())
         .addField('Created', new Date(user.createdTimestamp).toLocaleDateString())
-        .setFooter(`${process.env.VERSION} • ${new Date(message.createdTimestamp).toLocaleDateString()}`)
-        message.channel.send({embeds: [mesaj]});
+        .setFooter(`${process.env.VERSION} • ${new Date(interaction.createdTimestamp).toLocaleDateString()}`)
+        interaction.followUp({embeds: [mesaj]});
     }
 }

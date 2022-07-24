@@ -1,12 +1,13 @@
+const { Client, CommandInteraction } = require('discord.js')
 const { MessageEmbed } = require('discord.js');
+
 module.exports = {
     name: 'help',
     description: 'displays help about the commands of the bot',
-    execute(message){
+    execute(client, interaction){
         var mesaj = new MessageEmbed()
         .setColor('BLURPLE')
         .setTitle('ℹ️ HELP')
-        .setDescription('Prefix: mn')
         .addField(
             'HELP',
             'Displays this message'
@@ -51,7 +52,7 @@ module.exports = {
             'VERIFY-KICK',
             `Generates a new verify kick message`
         )
-        .setFooter(`${process.env.VERSION} • ${new Date(message.createdTimestamp).toLocaleDateString()} • © Sergetec`)
-        message.channel.send({ embeds: [mesaj] });
+        .setFooter(`${process.env.VERSION} • ${new Date(interaction.createdTimestamp).toLocaleDateString()} • © Sergetec`)
+        interaction.followUp({ embeds: [mesaj] });
     }
 };

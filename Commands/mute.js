@@ -1,3 +1,4 @@
+const { Client, CommandInteraction } = require('discord.js')
 const ms = require('ms');
 const { MessageEmbed } = require('discord.js');
 const punishmentSchema = require('../Models/punishment-schema');
@@ -17,30 +18,50 @@ let fullAccess = '988913956406063114'
 module.exports = {
     name: 'mute',
     description: 'mutes a member',
-    async execute(message, args, client){
-        if (message.member.roles.cache.has(FOUNDER) || message.member.roles.cache.has(CEO) || message.member.roles.cache.has(CO_FOUNDER) || message.member.roles.cache.has(DEVELOPER) || message.member.roles.cache.has(MANAGER) || message.member.roles.cache.has(MODERATOR) || message.member.roles.cache.has(HELPER))
+    options: [
         {
-            let user = message.mentions.members.first() || message.guild.members.cache.get(args[0]); //FOLOSIT DOAR LA MEMBERTARGET
-            const mutedMember = message.mentions.users.first(); //FOLOSIT DOAR LA NICKNAME
+            name: 'user',
+            type: 'USER',
+            description: 'The user to be muted',
+            required: true,
+        },
+        {
+            name: 'duration',
+            type: 'STRING',
+            description: 'The duration of the mute',
+            required: true,
+        },
+        {
+            name: 'reason',
+            type: 'STRING',
+            description: 'The reason for the mute',
+            required: true,
+        },
+    ],
+    async execute(client, interaction){
+        if (interaction.member.roles.cache.has(FOUNDER) || interaction.member.roles.cache.has(CEO) || interaction.member.roles.cache.has(CO_FOUNDER) || interaction.member.roles.cache.has(DEVELOPER) || interaction.member.roles.cache.has(MANAGER) || interaction.member.roles.cache.has(MODERATOR) || interaction.member.roles.cache.has(HELPER))
+        {
+            const user = interaction.options.getUser('user'); //FOLOSIT DOAR LA MEMBERTARGET
+            const mutedMember = interaction.options.getUser('user'); //FOLOSIT DOAR LA NICKNAME
             if (user)
             {
                 const muteRole = '984869290194903060';
-                let memberTarget = message.guild.members.cache.get(user.id);
+                let memberTarget = interaction.guild.members.cache.get(user.id);
                 if (memberTarget.roles.cache.has(STAFF) || memberTarget.roles.cache.has(fullAccess)){
-                    return message.reply('**NU INCERCA SA-TI DAI MUTE LA COLEGI BRO**');
+                    return interaction.followUp('**NU INCERCA SA-TI DAI MUTE LA COLEGI BRO**');
                 }
                 const result = await punishmentSchema.findOne({
                     userID: user.id,
                     type: 'mute',
                 })
                 if (result){
-                    return message.channel.send(`<@${user.id}> is already muted.`)
+                    return interaction.followUp(`<@${user.id}> is already muted.`)
                 }
-                var time = args[1];
-                if (!args[1]){
-                    return;
+                var time = interaction.options.getString('duration');
+                var reason = interaction.options.getString('reason');
+                if (!containsNumber(time)){
+                    return interaction.followUp('Invalid format');
                 }
-                var reason = args.slice(2).join(' ')
                 let split = time.match(/\d+|\D+/g)
                 let time2 = parseInt(split[0])
                 let type = split[1].toLowerCase();
@@ -51,21 +72,21 @@ module.exports = {
                     time2 *= 60 * 24
                 }
                 else if (type !== 'm'){
-                    return message.channel.send('Invalid format.');
+                    return interaction.followUp('Invalid format.');
                 }
 
                 if (!time)
                 {
-                    return message.channel.send('Time not specified.');
+                    return interaction.followUp('Time not specified.');
                 }
                 if (!reason)
                 {
                     reason = 'No reason provided'
-                    message.channel.send(`<@${memberTarget.user.id}> has been muted for ${ms(ms(time))}`);
+                    interaction.followUp(`<@${memberTarget.user.id}> has been muted for ${ms(ms(time))}`);
                 }
                 else
                 {
-                    message.channel.send(`<@${memberTarget.user.id}> has been muted for ${reason}, ${ms(ms(time))}`);
+                    interaction.followUp(`<@${memberTarget.user.id}> has been muted for ${reason}, ${ms(ms(time))}`);
                 }
 
                 await memberTarget.roles.add(muteRole);
@@ -75,7 +96,7 @@ module.exports = {
                 expires1.setMinutes(expires1.getMinutes() + time2)
                 let schema = await punishmentSchema.create({
                     userID: user.id,
-                    staffID: message.author.id,
+                    staffID: interaction.user.id,
                     reason: reason,
                     expires: expires1,
                     type: 'mute',
@@ -85,7 +106,7 @@ module.exports = {
                 //ARHIVA
                 let arhiva = await archiveSchema.create({
                     userID: user.id,
-                    staffID: message.author.id,
+                    staffID: interaction.user.id,
                     reason: reason,
                     type: 'mute',
                 })
@@ -95,7 +116,7 @@ module.exports = {
                 const mesaj = new MessageEmbed()
                     .setTitle('MUTE')
                     .setColor('RED')
-                    .setFooter(`${process.env.VERSION} • ${new Date(message.createdTimestamp).toLocaleDateString()}`)
+                    .setFooter(`${process.env.VERSION} • ${new Date(interaction.createdTimestamp).toLocaleDateString()}`)
                     .addField(
                         'ID',
                         `${memberTarget.id}`,
@@ -113,12 +134,12 @@ module.exports = {
                     )
                     .addField(
                         'Muted by',
-                        `<@${message.author.id}>`,
+                        `<@${interaction.user.id}>`,
                         true
                     )
                     .addField(
                         'Nickname',
-                        message.author.nickname || message.author.tag.substring(0, message.author.tag.length - 5),
+                        interaction.user.nickname ||interaction.user.tag.substring(0, interaction.user.tag.length - 5),
                         true
                     )
                     .addField(
@@ -134,15 +155,10 @@ module.exports = {
                     client.channels.cache.get('995766750266278019').send({ embeds: [mesaj] });
                     return;
             }
-            else
-            {
-                message.channel.send('Can\'t find that member');
-            }
-            return;
         }
-        message.reply("Missing permission: **MUTE MEMBERS**")
-        .then(message => {
-            setTimeout(() => message.delete(), 5000);
-        })
     }
 }
+
+function containsNumber(str) {
+    return /\d/.test(str);
+  }

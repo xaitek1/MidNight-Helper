@@ -3,13 +3,16 @@ const fs = require('fs');
 module.exports = (client) => {
     const commandFiles = fs.readdirSync('./Commands/').filter(file => file.endsWith('.js'));
 
+    const commandsArray = [];
     for (const file of commandFiles){
         const command = require(`../Commands/${file}`);
         if (command.name){
             client.commands.set(command.name, command);
-        }
-        else{
-            continue;
+            commandsArray.push(command)
+
+            client.on("ready", () => {
+                client.guilds.cache.get("984505316462981190").commands.set(commandsArray)
+            })
         }
     }
 }

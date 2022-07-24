@@ -1,3 +1,4 @@
+const { Client, CommandInteraction } = require('discord.js')
 const { MessageEmbed } = require('discord.js');
 const punishmentSchema = require('../Models/punishment-schema');
 const archiveSchema = require('../Models/archive-schema')
@@ -14,17 +15,32 @@ let HELPER = '984505316630732919'
 module.exports = {
     name: 'unmute',
     description: 'unmutes a member',
-    async execute(message, args, client){
-        if (message.member.roles.cache.has(FOUNDER) || message.member.roles.cache.has(CEO) || message.member.roles.cache.has(CO_FOUNDER) || message.member.roles.cache.has(DEVELOPER) || message.member.roles.cache.has(MANAGER) || message.member.roles.cache.has(MODERATOR) || message.member.roles.cache.has(HELPER)){
-            const user = message.mentions.members.first() || message.guild.members.cache.get(args[0]); //FOLOSIT DOAR LA MEMBERTARGET
-            const mutedMember = message.mentions.users.first(); //FOLOSIT DOAR LA NICKNAME
+    options: [
+        {
+            name: 'user',
+            type: 'USER',
+            description: 'The user to be unmute',
+            required: true,
+        },
+        {
+            name: 'reason',
+            type: 'STRING',
+            description: 'The reason for the unmute',
+            required: true,
+        },
+    ],
+    async execute(client, interaction){
+        if (interaction.member.roles.cache.has(FOUNDER) || interaction.member.roles.cache.has(CEO) || interaction.member.roles.cache.has(CO_FOUNDER) || interaction.member.roles.cache.has(DEVELOPER) || interaction.member.roles.cache.has(MANAGER) || interaction.member.roles.cache.has(MODERATOR) || interaction.member.roles.cache.has(HELPER)){
+            
+            const user = interaction.options.getUser('user'); //FOLOSIT DOAR LA MEMBERTARGET
+            const mutedMember = interaction.options.getUser('user'); //FOLOSIT DOAR LA NICKNAME
             if (user)
             {
                 let muteRole = '984869290194903060';
-                let memberTarget = message.guild.members.cache.get(user.id);
-                var reason = args.slice(1).join(' ');
+                let memberTarget = interaction.guild.members.cache.get(user.id);
+                var reason = interaction.options.getString('reason');
                 await memberTarget.roles.remove(muteRole);
-                message.channel.send(`<@${memberTarget.user.id}> has been unmuted`);
+                interaction.followUp(`<@${memberTarget.user.id}> has been unmuted`);
                 if (!reason)
                 {
                     reason = 'No reason provided'
@@ -45,7 +61,7 @@ module.exports = {
                 //ARHIVA
                 let arhiva = await archiveSchema.create({
                     userID: user.id,
-                    staffID: message.author.id,
+                    staffID: interaction.user.id,
                     reason: reason,
                     type: 'unmute',
                 })
@@ -55,7 +71,7 @@ module.exports = {
                 const mesaj = new MessageEmbed()
                     .setTitle('UNMUTE')
                     .setColor('GREEN')
-                    .setFooter(`${process.env.VERSION} • ${new Date(message.createdTimestamp).toLocaleDateString()}`)
+                    .setFooter(`${process.env.VERSION} • ${new Date(interaction.createdTimestamp).toLocaleDateString()}`)
                     .addField(
                         'ID',
                         `${memberTarget.id}`,
@@ -73,12 +89,12 @@ module.exports = {
                     )
                     .addField(
                         'Unmuted by',
-                        `<@${message.author.id}>`,
+                        `<@${interaction.user.id}>`,
                         true
                     )
                     .addField(
                         'Nickname',
-                        message.author.nickname || message.author.tag.substring(0, message.author.tag.length - 5),
+                        interaction.user.nickname || interaction.user.tag.substring(0, interaction.user.tag.length - 5),
                         true
                     )
                     .addField(
@@ -90,15 +106,6 @@ module.exports = {
                     client.channels.cache.get(channel).send({ embeds: [mesaj] });
                     return;
             }
-            else
-            {
-                message.channel.send('Can\'t find that member');
-            }
-            return;
         }
-        message.reply("Missing permission: **UNMUTE MEMBERS**")
-        .then(message => {
-            setTimeout(() => message.delete(), 5000);
-        })
     }
 }
