@@ -12,14 +12,8 @@ module.exports = (client) => {
             commandsArray.push(command)
 
             client.on("ready", () => {
-                client.guilds.cache.get("984505316462981190").commands.set(commandsArray)
+                client.guilds.cache.get("984505316462981190").commands.set(commandsArray);
+                client.commands.set(commandsArray);
             })
         }
-
-        commandsArray.push(command);
-
-    }
-    client.on('ready', () => {
-        client.commands.set(commandsArray);
-    })
 }
