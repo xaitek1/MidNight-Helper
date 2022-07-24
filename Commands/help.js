@@ -37,6 +37,10 @@ module.exports = {
             `Unmutes a member\nUsage: \`unmute @Lancer reason\`\n\nUnbans a member\nUsage: \`unban @Lancer reason\``
         )
         .addField(
+            'HIST',
+            'Shows the user history of a user'
+        )
+        .addField(
             'USER-INFO',
             `Displays information about a specific user\nUsage:\`user-info @Lancer\` OR \`user-info\` (for your own info)`
         )
