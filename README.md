@@ -2,23 +2,22 @@
 ## The official bot of MidNight Discord server.
 ---
 ## Features
-### Commands
-- ban/mute/kick
-- unban/unmute
-- purge
-- user info / server info
-- status / help
-- user history
+### Slash Commands
+- Ban/Mute/Kick
+- Unban/Unmute
+- Purge
+- User info / Server info
+- Status / help
+- User history
 
 ### Other
 - User/Staff permissions
 - Ticket unban
 - Logs - sanctiuni / notificari - unban
-- Sistem de kick
+- Kick system
 - Security
 - Database
 
 ### WIP
 - Staff/Bot Logs
-- Slash Commands
 - Music
