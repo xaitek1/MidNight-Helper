@@ -6,6 +6,7 @@ module.exports = (client) => {
     const commandsArray = [];
     for (const file of commandFiles){
         const command = require(`../Commands/${file}`);
+        
         if (command.name){
             client.commands.set(command.name, command);
             commandsArray.push(command)
@@ -14,5 +15,11 @@ module.exports = (client) => {
                 client.guilds.cache.get("984505316462981190").commands.set(commandsArray)
             })
         }
+
+        commandsArray.push(command);
+
     }
+    client.on('ready', () => {
+        client.commands.set(commandsArray);
+    })
 }
