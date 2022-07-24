@@ -8,11 +8,6 @@ module.exports = (client) => {
         const command = require(`../Commands/${file}`);
         if (command.name){
             client.commands.set(command.name, command);
-            commandsArray.push(command)
-
-            client.on("ready", () => {
-                client.guilds.cache.get("984505316462981190").commands.set(commandsArray)
-            })
         }
     }
 }
