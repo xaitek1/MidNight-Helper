@@ -46,7 +46,7 @@ module.exports = {
                 }
                 let reply = ''
                 for (const result of results) {
-                    reply += `[+] **${result.type.toUpperCase()}** at ${new Date(result.createdAt).toLocaleDateString()} by <@${result.staffID}> for \`${result.reason}\`\n\n`
+                    reply += `[${result._id}] **${result.type.toUpperCase()}** at ${new Date(result.createdAt).toLocaleDateString()} by <@${result.staffID}> for \`${result.reason}\`\n\n`
                 }
                 let mesaj = new MessageEmbed()
                 .setColor('RED')
