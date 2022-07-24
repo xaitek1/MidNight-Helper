@@ -6,10 +6,9 @@ module.exports = (client) => {
     const commandsArray = [];
     for (const file of commandFiles){
         const command = require(`../Commands/${file}`);
-        client.commands.set(command.name, command);
         commandsArray.push(command);
-        client.on('ready', () => {
-            client.commands.set(commandsArray);
-        })
     }
+    client.on('ready', () => {
+        client.commands.set(commandsArray);
+    })
 }
