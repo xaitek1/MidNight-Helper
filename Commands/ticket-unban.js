@@ -34,5 +34,6 @@ module.exports = {
             interaction.followUp('Unban ticket generat');
             return;
         }
+        interaction.followUp({ content: '**MISSING PERMISSION: TICKET-UNBAN**' });
     }
 }

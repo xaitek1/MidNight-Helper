@@ -34,5 +34,6 @@ module.exports = {
             interaction.followUp('mesaj de kick generat');
             return;
         }
+        interaction.followUp({ content: '**MISSING PERMISSION: KICK-VERIFY**' });
     }
 }

@@ -56,8 +56,9 @@ module.exports = {
                     `${reply}`,
                 )
                 interaction.followUp({ embeds: [mesaj] });
+                return;
             }
-            return;
         }
+        interaction.followUp({ content: '**MISSING PERMISSION: HIST**' });
     }
 }

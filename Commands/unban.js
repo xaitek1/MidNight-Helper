@@ -109,5 +109,6 @@ module.exports = {
                     return;
             }
         }
+        interaction.followUp({ content: '**MISSING PERMISSION: UNBAN MEMBERS**' });
     }
 };
