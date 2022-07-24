@@ -16,4 +16,5 @@ module.exports = (client) => {
                 client.commands.set(commandsArray);
             })
         }
+    }
 }
