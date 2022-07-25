@@ -6,8 +6,13 @@ let CEO = '993535251445973012'
 let CO_FOUNDER = '984505316630732913'
 let DEVELOPER = '984505316630732915'
 let MANAGER = '984505316630732914'
+let SUPERVIZOR = '1000368593889923082'
+let ADMIN = '1000369099563614330'
 let MODERATOR = '984505316630732918'
 let HELPER = '984505316630732919'
+let TRIAL_HELPER = '1000369518465527809'
+let STAFF = '984505316668493876'
+let fullAccess = '988913956406063114'
 
 module.exports = {
     name: 'purge',
@@ -27,7 +32,7 @@ module.exports = {
         },
     ],
     async execute(client, interaction){
-            if (interaction.member.roles.cache.has(FOUNDER) || interaction.member.roles.cache.has(CEO) || interaction.member.roles.cache.has(CO_FOUNDER) || interaction.member.roles.cache.has(DEVELOPER) || interaction.member.roles.cache.has(MANAGER) || interaction.member.roles.cache.has(MODERATOR)){
+            if (interaction.member.roles.cache.has(FOUNDER) || interaction.member.roles.cache.has(CEO) || interaction.member.roles.cache.has(CO_FOUNDER) || interaction.member.roles.cache.has(DEVELOPER) || interaction.member.roles.cache.has(MANAGER) || interaction.member.roles.cache.has(SUPERVIZOR) || interaction.member.roles.cache.has(ADMIN) || interaction.member.roles.cache.has(MODERATOR)){
                 var amount = parseInt(interaction.options.getString('amount'));
                 if (amount > 100){
                     amount = 100;
