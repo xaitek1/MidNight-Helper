@@ -11,9 +11,9 @@ module.exports = (client) => {
             client.commands.set(command.name, command);
             commandsArray.push(command)
 
-            client.on("ready", () => {
-                client.guilds.cache.get("984505316462981190").commands.set(commandsArray);
-                client.commands.set(commandsArray);
+            client.on("ready", async () => {
+                //client.guilds.cache.get("984505316462981190").commands.set(commandsArray); - guild commands
+                await client.application?.commands.set(commandsArray);
             })
         }
     }
