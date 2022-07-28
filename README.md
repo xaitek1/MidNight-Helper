@@ -9,6 +9,7 @@
 - User info / Server info
 - Status / help
 - User history
+- Create embed
 
 ### Other
 - User/Staff permissions
@@ -17,7 +18,9 @@
 - Kick system
 - Security
 - Database
+- Welcome message
 
 ### WIP
-- Staff/Bot Logs
+- Bot Logs
 - Music
+- Setup command (public release soon)
