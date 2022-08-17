@@ -10,7 +10,7 @@
   "author": "Sergetec",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^13.8.1",
+    "discord.js": "^13.10.2",
     "dotenv": "^16.0.1",
     "mongoose": "^6.4.4",
     "ms": "^2.1.3"

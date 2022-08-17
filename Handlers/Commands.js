@@ -1,11 +1,11 @@
 const fs = require('fs');
 
 module.exports = (client) => {
-    const commandFiles = fs.readdirSync('./Commands/').filter(file => file.endsWith('.js'));
+    const commandFiles = fs.readdirSync('./GlobalCommands/').filter(file => file.endsWith('.js'));
 
     const commandsArray = [];
     for (const file of commandFiles){
-        const command = require(`../Commands/${file}`);
+        const command = require(`../GlobalCommands/${file}`);
         
         if (command.name){
             client.commands.set(command.name, command);

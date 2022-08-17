@@ -24,7 +24,7 @@ module.exports = {
 
         // CHECK FOR EXPIRED PUNISHMENTS
         const check = async () => {
-            console.log('Checking database!')
+            //console.log('Checking database!')
             const query = {
                 expires: { $lt: new Date() },
             }
