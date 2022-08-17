@@ -19,8 +19,8 @@
 - Security
 - Database
 - Welcome message
+- Setup Commands
 
 ### WIP
 - Bot Logs
 - Music
-- Setup command (public release soon)
